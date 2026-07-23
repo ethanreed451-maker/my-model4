@@ -1,0 +1,21 @@
+name: Download Whisper Base Persian
+on: workflow_dispatch
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install git-lfs
+          git lfs install
+      - name: Clone model repository
+        run: |
+          git clone https://huggingface.co/arun100/whisper-base-fa-2 ./model
+          cd ./model
+          git lfs pull
+      - name: Upload model
+        uses: actions/upload-artifact@v4
+        with:
+          name: whisper-base-fa-model
+          path: ./model
