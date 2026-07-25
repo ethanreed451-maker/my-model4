@@ -9,12 +9,15 @@ jobs:
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
 
-      - name: Download video
+      - name: Download video with cookies
+        env:
+          YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
         run: |
+          echo "$YOUTUBE_COOKIES" > cookies.txt
           yt-dlp \
-            --extractor-args "youtube:player_client=web,android,ios" \
-            -f "bv*+ba/b" \
-            --merge-output-format mp4 \
+            --cookies cookies.txt \
+            --extractor-args "youtube:player_client=android" \
+            -f "best[ext=mp4]/best" \
             --no-playlist \
             -o "video.%(ext)s" \
             "https://www.youtube.com/shorts/QjJzegLSaJo"
