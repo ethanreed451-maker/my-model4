@@ -4,20 +4,24 @@ jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-      - name: Install yt-dlp
+      - name: Install yt-dlp (official binary)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install -U yt-dlp
+          sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+          sudo chmod a+rx /usr/local/bin/yt-dlp
+          yt-dlp --version
 
-      - name: Download video from YouTube
+      - name: Download video
         run: |
-          yt-dlp -f "best[ext=mp4]/best" \
+          yt-dlp \
+            -f "best[ext=mp4]/best" \
+            --no-playlist \
+            --merge-output-format mp4 \
             -o "video.%(ext)s" \
-            "https://youtube.com/shorts/QjJzegLSaJo?si=nQQxjjph1yTTOg9s"
+            "https://www.youtube.com/shorts/QjJzegLSaJo"
 
       - name: Upload video
         uses: actions/upload-artifact@v4
         with:
           name: youtube-video
           path: video.*
+          if-no-files-found: error
