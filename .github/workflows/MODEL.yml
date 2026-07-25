@@ -4,10 +4,14 @@ jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-      - name: Install yt-dlp
+      - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y curl nodejs
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
+          yt-dlp --version
+          node --version
 
       - name: Create cookies file
         run: |
@@ -43,8 +47,10 @@ jobs:
         run: |
           yt-dlp \
             --cookies cookies.txt \
+            --js-runtimes node \
             --extractor-args "youtube:player_client=web,web_safari,tv" \
-            -f "best[ext=mp4]/best" \
+            -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
+            --merge-output-format mp4 \
             --no-playlist \
             -o "video.%(ext)s" \
             "https://www.youtube.com/shorts/QjJzegLSaJo"
