@@ -43,7 +43,7 @@ jobs:
         run: |
           yt-dlp \
             --cookies cookies.txt \
-            --extractor-args "youtube:player_client=android" \
+            --extractor-args "youtube:player_client=web,web_safari,tv" \
             -f "best[ext=mp4]/best" \
             --no-playlist \
             -o "video.%(ext)s" \
