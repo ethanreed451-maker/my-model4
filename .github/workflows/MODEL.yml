@@ -1,21 +1,23 @@
-name: Download Whisper Base Persian
+name: Download YouTube Video
 on: workflow_dispatch
 jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Git LFS
+      - name: Install yt-dlp
         run: |
           sudo apt-get update
-          sudo apt-get install git-lfs
-          git lfs install
-      - name: Clone model repository
+          sudo apt-get install -y python3-pip
+          pip3 install -U yt-dlp
+
+      - name: Download video from YouTube
         run: |
-          git clone https://huggingface.co/arun100/whisper-base-fa-2 ./model
-          cd ./model
-          git lfs pull
-      - name: Upload model
+          yt-dlp -f "best[ext=mp4]/best" \
+            -o "video.%(ext)s" \
+            "https://youtube.com/shorts/QjJzegLSaJo?si=nQQxjjph1yTTOg9s"
+
+      - name: Upload video
         uses: actions/upload-artifact@v4
         with:
-          name: whisper-base-fa-model
-          path: ./model
+          name: youtube-video
+          path: video.*
