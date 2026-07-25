@@ -9,16 +9,38 @@ jobs:
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
 
-      - name: Download video with cookies
-        env:
-          YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
+      - name: Create cookies file
         run: |
-          printf '%s\n' "$YOUTUBE_COOKIES" > cookies.txt
-          
-          echo "=== چند خط اول فایل کوکی ==="
-          head -n 5 cookies.txt
-          echo "============================"
-          
+          cat > cookies.txt << 'EOF'
+          # Netscape HTTP Cookie File
+          # https://curl.haxx.se/rfc/cookie_spec.html
+          # This is a generated file! Do not edit.
+
+          .youtube.com	TRUE	/	FALSE	1803842482	SID	g.a0006AgxkQl1iitb4FP9XuB3dWFBUmjSVpSqkTBt40THR_X8pojMiz9-YViB3GPgw9QCy4Ou_AACgYKAfESARMSFQHGX2Mi26oijiUsKw_2IhoCC3AI9xoVAUF8yKp9BtucMBKxeCWEiLRmAo-20076
+          .youtube.com	TRUE	/	TRUE	1803842482	__Secure-1PSID	g.a0006AgxkQl1iitb4FP9XuB3dWFBUmjSVpSqkTBt40THR_X8pojMLAMK6H5XC1VHhLFoGFL3owACgYKAXsSARMSFQHGX2MitEAXlm_G-5STxEF8X5oNZBoVAUF8yKp6mry6K6spfiEu23LDBDi-0076
+          .youtube.com	TRUE	/	TRUE	1803842482	__Secure-3PSID	g.a0006AgxkQl1iitb4FP9XuB3dWFBUmjSVpSqkTBt40THR_X8pojMIBGMGIhSQea1pIFQCyCndgACgYKAVESARMSFQHGX2MinfwhbmbUbpXGN6cM2DBzMxoVAUF8yKpq1Iom1vQ0sRDNLLDdGO0R0076
+          .youtube.com	TRUE	/	FALSE	1803842482	HSID	A5c2xuG0heREzKYaT
+          .youtube.com	TRUE	/	TRUE	1803842482	SSID	APe_dpmOaqsBcoMiL
+          .youtube.com	TRUE	/	FALSE	1803842482	APISID	rEO0Xt9XGYxC76p4/AEndHwgHflwoOynoU
+          .youtube.com	TRUE	/	TRUE	1803842482	SAPISID	kMHBPtXreAVwEBnV/AhX66KVBg-ZJwCdJU
+          .youtube.com	TRUE	/	TRUE	1803842482	__Secure-1PAPISID	kMHBPtXreAVwEBnV/AhX66KVBg-ZJwCdJU
+          .youtube.com	TRUE	/	TRUE	1803842482	__Secure-3PAPISID	kMHBPtXreAVwEBnV/AhX66KVBg-ZJwCdJU
+          .youtube.com	TRUE	/	TRUE	1804786709	LOGIN_INFO	AFmmF2swRQIgCHqhidMFng8kkkB0JJAXv0sqUaJXj7FewFt3XmzS3qwCIQDiEY9dC6xiv6tqX7oeBr0PXGce4PHB6gR_UkdppGEtYQ:QUQ3MjNmek5tQmRuUEgzZ3kxMmlWamVHZnVkTkdqVklnekdOX2pqeTdwa28tNXFGTWtqTXBrNWgtcW1EeGpNaWwtLTlnZnFOcFhHU21heVM4UmxfdHlFamFmVFFBVVpHRGlBV0lUbHk1MjdMUVJRNHZYd21jU2tadHA4M1dONUF6STlEai01Q0w0RmEwOW80NmQyVlFvUl96Znl3Z0hUZ2FB
+          .youtube.com	TRUE	/	TRUE	1819551387	PREF	tz=Asia.Tehran
+          .youtube.com	TRUE	/	TRUE	1816527392	__Secure-1PSIDTS	sidts-CjEBPWEu2YupcF7bExD5FAoIJSEfq8uQkTz5xrg2eoDs-yFmPMgbiJVNDdzhwOGwUw20EAA
+          .youtube.com	TRUE	/	TRUE	1816527392	__Secure-3PSIDTS	sidts-CjEBPWEu2YupcF7bExD5FAoIJSEfq8uQkTz5xrg2eoDs-yFmPMgbiJVNDdzhwOGwUw20EAA
+          .youtube.com	TRUE	/	FALSE	1816527404	SIDCC	AKEyXzU2GaQhDImYYlfh9DLDXT-pZAIUjbNwUokG9iAk2ltCutCdG91Ho0iVocm81wC9g-4G1Q
+          .youtube.com	TRUE	/	TRUE	1816527404	__Secure-1PSIDCC	AKEyXzVI_Lnq99-btQK9xiHTjEwtp4AidMz6zVooftRqkokq93vpCyQ_wNhJPE9XaAm-QHUQ
+          .youtube.com	TRUE	/	TRUE	1816527404	__Secure-3PSIDCC	AKEyXzXcZToDgDOKO0blKWF7S1I5EIia13azO2LZKgGBcFAx2ZfiWeWWKPei42pzcJyeul6c
+          .youtube.com	TRUE	/	TRUE	0	YSC	shUjNkIru80
+          .youtube.com	TRUE	/	TRUE	1800543388	VISITOR_INFO1_LIVE	SntIm8dMGK4
+          .youtube.com	TRUE	/	TRUE	1800543388	VISITOR_PRIVACY_METADATA	CgJVUxIEGgAgSw%3D%3D
+          .youtube.com	TRUE	/	TRUE	1800543375	__Secure-YNID	20.YT=QZ_aXH7VMfiSHIWCAcbsVs_pIulGXh8D3HW_O6G5JS46bLNYxJZiYosZd2FH4Y8KWdaXf6STyoVFnGp2jZ1Isti90JuDyUKl9JS5HsaY-VPYJtLoxOdJQ0JZA_orltbS40PXWS1LM6sCqEimLNeHW2dag2AvYbB5CqLT03zY3BgttCMJOMkceUgf4R_vzZY4WembraBMtuhBAqW-XDnRpUsGpO0X2wt8Jo-eD0I0l_tRw93j10c7I8rx3rMRIkjEB3DN7P5zpwtsIVk2sEUXsc7I30oEWP42Qdb-OYFZyQ36L0W49cKLeutBAzvTRDbCAl6zl6EaAVPrBlnEWod5FQ
+          .youtube.com	TRUE	/	TRUE	1800543385	__Secure-ROLLOUT_TOKEN	CKKqpbHhzr_TsgEQ1p2Qh4vulQMYw6zci4vulQM%3D
+          EOF
+
+      - name: Download video
+        run: |
           yt-dlp \
             --cookies cookies.txt \
             --extractor-args "youtube:player_client=android" \
@@ -27,6 +49,7 @@ jobs:
             -o "video.%(ext)s" \
             "https://www.youtube.com/shorts/QjJzegLSaJo"
           
+          echo "=== فایل‌های دانلود شده ==="
           ls -lah
 
       - name: Upload video
