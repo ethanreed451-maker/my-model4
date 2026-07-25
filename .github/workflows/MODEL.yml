@@ -13,7 +13,12 @@ jobs:
         env:
           YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
         run: |
-          echo "$YOUTUBE_COOKIES" > cookies.txt
+          printf '%s\n' "$YOUTUBE_COOKIES" > cookies.txt
+          
+          echo "=== چند خط اول فایل کوکی ==="
+          head -n 5 cookies.txt
+          echo "============================"
+          
           yt-dlp \
             --cookies cookies.txt \
             --extractor-args "youtube:player_client=android" \
