@@ -8,22 +8,18 @@ jobs:
         run: |
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
-          yt-dlp --version
 
       - name: Download video
         run: |
-          echo "=== شروع دانلود ==="
           yt-dlp \
-            --extractor-args "youtube:player_client=android" \
-            -f "best[ext=mp4]/best" \
+            --extractor-args "youtube:player_client=web,android,ios" \
+            -f "bv*+ba/b" \
+            --merge-output-format mp4 \
             --no-playlist \
-            --retries 5 \
             -o "video.%(ext)s" \
             "https://www.youtube.com/shorts/QjJzegLSaJo"
           
-          echo "=== فایل‌های موجود ==="
           ls -lah
-          echo "=== پایان ==="
 
       - name: Upload video
         uses: actions/upload-artifact@v4
