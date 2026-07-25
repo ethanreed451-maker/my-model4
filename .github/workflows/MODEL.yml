@@ -6,23 +6,22 @@ jobs:
     steps:
       - name: Install yt-dlp
         run: |
-          sudo apt-get update
-          sudo apt-get install -y curl python3
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
           yt-dlp --version
 
-      - name: Download video (verbose)
+      - name: Download video
         run: |
           echo "=== شروع دانلود ==="
-          yt-dlp -v \
+          yt-dlp \
+            --extractor-args "youtube:player_client=android" \
             -f "best[ext=mp4]/best" \
             --no-playlist \
-            --merge-output-format mp4 \
+            --retries 5 \
             -o "video.%(ext)s" \
-            "https://www.youtube.com/shorts/QjJzegLSaJo" || true
+            "https://www.youtube.com/shorts/QjJzegLSaJo"
           
-          echo "=== لیست فایل‌ها بعد از دانلود ==="
+          echo "=== فایل‌های موجود ==="
           ls -lah
           echo "=== پایان ==="
 
@@ -31,4 +30,4 @@ jobs:
         with:
           name: youtube-video
           path: video.*
-          if-no-files-found: warn
+          if-no-files-found: error
