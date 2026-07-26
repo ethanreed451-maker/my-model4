@@ -53,7 +53,7 @@ jobs:
             --merge-output-format mp4 \
             --no-playlist \
             -o "video.%(ext)s" \
-            "https://www.youtube.com/shorts/QjJzegLSaJo"
+            "https://youtube.com/shorts/dioC4sSuJUE?si=JGdgLTzqeUsdbPtF"
           
           echo "=== فایل‌های دانلود شده ==="
           ls -lah
